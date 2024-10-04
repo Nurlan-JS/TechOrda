@@ -1,6 +1,6 @@
 ### 
 ```bash
-bash username.sh` выводит ваше имя
+bash username.sh выводит ваше имя
 
 ```
 # stepik-id-printer (h1)
