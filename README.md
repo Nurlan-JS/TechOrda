@@ -1,5 +1,7 @@
-### ```bash
+### 
+```bash
 bash username.sh` выводит ваше имя
+
 ```
 # stepik-id-printer (h1)
 
@@ -17,6 +19,7 @@ bash username.sh` выводит ваше имя
 
 ```bash
 bash ./script.sh
+
 ```
 
 ## Портирование (h2)
