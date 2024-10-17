@@ -1,0 +1,24 @@
+server {
+    listen 8080;
+    server_name example.com;
+	
+    location / {
+        root /var/www/html/; 
+        try_files /index.html =404; 
+    }
+
+    location /images/ {
+        root /var/www/html/cats;
+        autoindex on;
+    }
+
+    location /gifs/ {
+        root /var/www/html/gifs;
+        autoindex on; 
+    }
+
+    location /secret_word {
+        return 201 'jusan-nginx-locations';
+        add_header Content-Type text/plain;
+    }
+}
