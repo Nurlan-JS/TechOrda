@@ -70,7 +70,7 @@ curl http://127.0.0.1:8000/sum1n/10
 ```
 Ответ:
 ```
-json
+``` json
 Copy code
 {
   "result": 55
