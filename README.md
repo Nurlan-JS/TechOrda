@@ -54,8 +54,8 @@ Copy code
 curl http://127.0.0.1:8000/
 Ответ:
 ```
-```
-json
+
+``` json
 Copy code
 {
   "Hello": "World"
