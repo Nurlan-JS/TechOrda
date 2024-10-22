@@ -50,13 +50,12 @@ uvicorn main:app --reload
 GET запрос к корню:
 
 ``` bash
-Copy code
 curl http://127.0.0.1:8000/
 Ответ:
 ```
 
-``` json
-Copy code
+```
+json
 {
   "Hello": "World"
 }
@@ -65,13 +64,13 @@ Copy code
 GET запрос:
 
 ``` bash
-Copy code
 curl http://127.0.0.1:8000/sum1n/10
 ```
 Ответ:
 ```
-``` json
-Copy code
+
+```
+json
 {
   "result": 55
 }
@@ -81,13 +80,12 @@ Copy code
 GET запрос:
 
 ``` bash
-Copy code
 curl http://127.0.0.1:8000/fibo?n=10
 ```
 Ответ:
 
-``` json
-Copy code
+```
+json
 {
   "result": 55
 }
@@ -96,13 +94,12 @@ Copy code
 POST запрос с заголовком:
 
 ``` bash
-Copy code
 curl -X POST -H "string: hello" http://127.0.0.1:8000/reverse
 ```
 Ответ:
 
-``` json
-Copy code
+```
+json
 {
   "result": "olleh"
 }
@@ -111,13 +108,12 @@ Copy code
 PUT запрос с телом запроса:
 
 ``` bash
-Copy code
 curl -X PUT -d '{"element":"Apple"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/list
 ```
 Ответ:
 
-``` json
-Copy code
+```
+json
 {
   "message": "Element added"
 }
@@ -131,8 +127,8 @@ curl http://127.0.0.1:8000/list
 ```
 Ответ:
 
-``` json
-Copy code
+```
+json
 {
   "result": ["Apple"]
 }
@@ -142,13 +138,11 @@ Copy code
 POST запрос с математическим выражением:
 
 ``` bash
-Copy code
 curl -X POST -d '{"expr":"10,+,5"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/calculator
 ```
 Ответ:
 
-``` json
-Copy code
+``` 
 {
   "result": 15
 }
