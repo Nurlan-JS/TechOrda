@@ -46,100 +46,113 @@ uvicorn main:app --reload
 
 ### 5. Примеры использования API
 
-``` bash
 1. Получение приветственного сообщения
 GET запрос к корню:
 
-bash
+``` bash
 Copy code
 curl http://127.0.0.1:8000/
 Ответ:
-
+```
+```
 json
 Copy code
 {
   "Hello": "World"
 }
+```
 2. Сумма чисел от 1 до N
 GET запрос:
 
-bash
+``` bash
 Copy code
 curl http://127.0.0.1:8000/sum1n/10
+```
 Ответ:
-
+```
 json
 Copy code
 {
   "result": 55
 }
+```
+
 3. N-е число Фибоначчи
 GET запрос:
 
-bash
+``` bash
 Copy code
 curl http://127.0.0.1:8000/fibo?n=10
+```
 Ответ:
 
-json
+``` json
 Copy code
 {
   "result": 55
 }
+```
 4. Реверс строки
 POST запрос с заголовком:
 
-bash
+``` bash
 Copy code
 curl -X POST -H "string: hello" http://127.0.0.1:8000/reverse
+```
 Ответ:
 
-json
+``` json
 Copy code
 {
   "result": "olleh"
 }
+```
 5. Добавление элемента в список
 PUT запрос с телом запроса:
 
-bash
+``` bash
 Copy code
 curl -X PUT -d '{"element":"Apple"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/list
+```
 Ответ:
 
-json
+``` json
 Copy code
 {
   "message": "Element added"
 }
+```
 6. Получение списка элементов
 GET запрос:
 
-bash
+``` bash
 Copy code
 curl http://127.0.0.1:8000/list
+```
 Ответ:
 
-json
+``` json
 Copy code
 {
   "result": ["Apple"]
 }
+```
+
 7. Калькулятор
 POST запрос с математическим выражением:
 
-bash
+``` bash
 Copy code
 curl -X POST -d '{"expr":"10,+,5"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/calculator
+```
 Ответ:
 
-json
+``` json
 Copy code
 {
   "result": 15
 }
 ```
-
 ### Postman запросы:
 
 - GET / - Проверка статуса и приветственного сообщения
