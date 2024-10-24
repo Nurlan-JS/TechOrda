@@ -1,0 +1,65 @@
+Установка openssl для генерации зашифрованных паролей: Убедитесь, что у вас установлен openssl. Если он не установлен, вы можете его установить с помощью следующей команды:
+
+bash
+Copy code
+sudo apt-get install openssl
+Создание файла паролей: Используйте openssl для генерации зашифрованных строк паролей:
+
+bash
+Copy code
+openssl passwd SomePassword1997
+Пример вывода:
+
+Copy code
+abcdefghijklmnopqrstuvwxyz123456
+Затем создайте файл passwd с помощью команды:
+
+bash
+Copy code
+sudo nano /etc/nginx/conf.d/passwd
+Внутри файла укажите пользователей и пароли:
+
+plaintext
+Copy code
+# comment
+serik:abcdefghijklmnopqrstuvwxyz123456
+john_doe:abcdefghijklmnop987654
+jane_doe:zyxwvutsrqponmlkjihgfedcba
+Настройка конфигурации NGINX: Откройте ваш конфигурационный файл NGINX, например, /etc/nginx/sites-available/default, и добавьте директивы auth_basic и auth_basic_user_file для блоков http, server или location.
+
+Пример конфигурации:
+
+nginx
+Copy code
+server {
+    listen 80;
+    server_name your_domain_or_ip;
+
+    location / {
+        auth_basic "Приватный сайт";                    # Текст в окне авторизации
+        auth_basic_user_file /etc/nginx/conf.d/passwd;  # Путь к файлу с паролями
+        root /path/to/your/static/files;
+        try_files $uri /index.html;
+    }
+}
+Проверка конфигурации: После внесения изменений проверьте синтаксис конфигурации:
+
+bash
+Copy code
+sudo nginx -t
+Если всё прошло успешно, перезагрузите NGINX:
+
+bash
+Copy code
+sudo systemctl reload nginx
+Тестирование базовой аутентификации: Вы можете протестировать аутентификацию с помощью curl:
+
+bash
+Copy code
+curl --user serik:SomePassword1997 http://localhost
+Если данные для аутентификации правильные, запрос выполнится успешно, и вы получите ответ от сервера. В случае некорректных данных или их отсутствия, сервер вернёт статус код 401 Unauthorized.
+
+Теперь ваш сервер NGINX защищён базовой аутентификацией, и только аутентифицированные пользователи смогут получить доступ к защищённому контенту.
+
+sudo chmod 640 /etc/nginx/conf.d/design_passwd
+sudo chown www-data:www-data /etc/nginx/conf.d/design_passwd
