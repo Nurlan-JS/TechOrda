@@ -1,0 +1,25 @@
+server {
+    listen 443 ssl;
+    server_name jusan.kz
+    
+    # Настройки 443 ssl сертификата и ключа
+    ssl_sertificate /etc/nginx/ssl/track-devops.crt;
+    ssl_sertificate_key /etc/nginx/ssl/track-devops.key;
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;  # Перемерты DH для учучшенной безопасноти
+
+    # Параметры SSL для повышения безопаности
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    location /secret_word {
+        return 201 'jusan-nginx-cert';
+        add_header Context-Type text/plain;
+    }
+
+    error_log /var/log/nginx/jusan_error.log;
+    access_log /var/log/nginx/jusan_access.log;
+}
+
+# sudo openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+# Флаг -k нужен для того, чтобы curl не ругался на самоподписанный сертификат.
