@@ -1,0 +1,69 @@
+1. Установка и запуск NGINX:
+Установите NGINX:
+
+bash
+Copy code
+sudo apt update
+sudo apt install nginx
+Запустите NGINX:
+
+bash
+Copy code
+sudo systemctl start nginx
+sudo systemctl enable nginx
+Проверьте, что NGINX работает:
+
+bash
+Copy code
+sudo systemctl status nginx
+Проверьте доступ на порту 80:
+
+bash
+Copy code
+curl http://localhost
+2. Установка и настройка UFW:
+Установите ufw (если не установлено):
+
+bash
+Copy code
+sudo apt install ufw
+Разрешите порты 80 и 443:
+
+bash
+Copy code
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+Включите ufw:
+
+bash
+Copy code
+sudo ufw enable
+Проверьте статус ufw:
+
+bash
+Copy code
+sudo ufw status
+Ожидаемый вывод:
+
+bash
+Copy code
+Status: active
+
+To                         Action      From
+--                         ------      ----
+80/tcp                     ALLOW       Anywhere
+443/tcp                    ALLOW       Anywhere
+80/tcp (v6)                ALLOW       Anywhere (v6)
+443/tcp (v6)               ALLOW       Anywhere (v6)
+3. Дополнительные действия:
+Если необходимо, отключите доступ ко всем другим портам:
+
+bash
+Copy code
+sudo ufw deny from any to any
+Убедитесь, что только порты 80 и 443 открыты снаружи, используя команду:
+
+bash
+Copy code
+sudo ufw status numbered
+Теперь ваш NGINX сервер будет доступен извне только на портах 80 (HTTP) и 443 (HTTPS).
