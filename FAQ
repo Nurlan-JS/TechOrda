@@ -1,0 +1,44 @@
+curl -o jusan-dockerfile.conf https://stepik.org/media/attachments/lesson/686238/jusan-dockerfile.conf
+curl -o jusan-dockerfile.zip https://stepik.org/media/attachments/lesson/686238/jusan-dockerfile.zip
+unzip jusan-dockerfile.zip
+
+
+FROM — задаёт базовый (родительский) образ.
+LABEL — описывает метаданные. Например — сведения о том, кто создал и поддерживает образ.
+ENV — устанавливает постоянные переменные среды.
+RUN — выполняет команду и создаёт слой образа. Используется для установки в контейнер пакетов.
+COPY — копирует в контейнер файлы и папки.
+ADD — копирует файлы и папки в контейнер, может распаковывать локальные .tar-файлы.
+CMD — описывает команду с аргументами, которую нужно выполнить когда контейнер будет запущен. Аргументы могут быть переопределены при запуске контейнера. В файле может присутствовать лишь одна инструкция CMD.
+WORKDIR — задаёт рабочую директорию для следующей инструкции.
+ARG — задаёт переменные для передачи Docker во время сборки образа.
+ENTRYPOINT — предоставляет команду с аргументами для вызова во время выполнения контейнера. Аргументы не переопределяются.
+EXPOSE — указывает на необходимость открыть порт.
+VOLUME — создаёт точку монтирования для работы с постоянным хранилищем.
+
+
+FROM python:3.7.2-alpine3.8
+LABEL maintainer="jeffmshale@gmail.com"
+# Устанавливаем зависимости
+RUN apk add --update git
+# Задаём текущую рабочую директорию
+WORKDIR /usr/src/my_app_directory
+# Копируем код из локального контекста в рабочую директорию образа
+COPY . .
+# Задаём значение по умолчанию для переменной
+ARG my_var=my_default_value
+# Настраиваем команду, которая должна быть запущена в контейнере во время его выполнения
+ENTRYPOINT ["python", "./app/my_script.py", "my_var"]
+# Открываем порты
+EXPOSE 8000
+# Создаём том для хранения данных
+VOLUME /my_volume
+
+
+https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index
+
+https://docs.docker.com/build/building/best-practices/
+
+https://docker-curriculum.com/#dockerfile
+
+https://habr.com/ru/companies/ruvds/articles/439980/

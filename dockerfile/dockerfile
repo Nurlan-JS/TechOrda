@@ -1,0 +1,12 @@
+FROM nginx:mainline
+COPY jusan-dockerfile.conf /etc/nginx/conf.d/jusan-dockerfile.conf
+COPY jusan-dockerfile /usr/share/nginx/html
+
+curl -o jusan-dockerfile.conf https://stepik.org/media/attachments/lesson/686238/jusan-dockerfile.conf
+curl -o jusan-dockerfile.zip https://stepik.org/media/attachments/lesson/686238/jusan-dockerfile.zip
+unzip jusan-dockerfile.zip
+
+
+docker build -t nginx:jusan-dockerfile .
+docker run -d --name jusan-nginx -p 6060:80 nginx:jusan-dockerfile
+
