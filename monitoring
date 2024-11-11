@@ -1,0 +1,110 @@
+1. Импортируйте необходимые библиотеки:
+
+python
+Copy code
+from prometheus_client import Counter, Histogram, Gauge, generate_latest
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi import FastAPI, Request
+import time
+
+
+2. Создайте метрики:
+
+# Счётчик HTTP запросов
+http_requests_total = Counter(
+    'http_requests_total', 'Number of HTTP requests received',
+    ['method', 'endpoint']
+)
+
+# Гистограмма длительности запросов
+http_requests_milliseconds = Histogram(
+    'http_requests_milliseconds', 'Duration of HTTP requests in milliseconds',
+    ['method', 'endpoint']
+)
+
+# Gauge метрики для хранения последнего результата
+last_sum1n = Gauge('last_sum1n', 'Value stores last result of sum1n')
+last_fibo = Gauge('last_fibo', 'Value stores last result of fibo')
+list_size = Gauge('list_size', 'Value stores current list size')
+last_calculator = Gauge('last_calculator', 'Value stores last result of calculator')
+
+# Счётчик ошибок в калькуляторе
+errors_calculator_total = Counter('errors_calculator_total', 'Number of errors in calculator')
+
+3. Создайте приложение FastAPI и добавьте промежуточное ПО для сбора метрик:
+app = FastAPI()
+
+# Промежуточное ПО для сбора метрик запросов
+class MetricsMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        method = request.method
+        endpoint = request.url.path
+        start_time = time.time()
+
+        # Увеличиваем счётчик запросов
+        http_requests_total.labels(method=method, endpoint=endpoint).inc()
+
+        # Вызов обработчика запроса
+        response = await call_next(request)
+
+        # Замеряем длительность запроса
+        duration = (time.time() - start_time) * 1000
+        http_requests_milliseconds.labels(method=method, endpoint=endpoint).observe(duration)
+
+        return response
+
+app.add_middleware(MetricsMiddleware)
+
+4.Определите маршруты и обновляйте метрики в обработчиках:
+
+@app.get("/sum1n")
+async def sum1n(n: int):
+    result = sum(range(1, n + 1))
+    last_sum1n.set(result)
+    return {"result": result}
+
+@app.get("/fibo")
+async def fibo(n: int):
+    def fibonacci(n):
+        if n <= 1:
+            return n
+        else:
+            return fibonacci(n - 1) + fibonacci(n - 2)
+
+    result = fibonacci(n)
+    last_fibo.set(result)
+    return {"result": result}
+
+@app.get("/calculator")
+async def calculator(a: float, b: float, operation: str):
+    try:
+        if operation == "add":
+            result = a + b
+        elif operation == "subtract":
+            result = a - b
+        elif operation == "multiply":
+            result = a * b
+        elif operation == "divide":
+            result = a / b
+        else:
+            raise ValueError("Invalid operation")
+
+        last_calculator.set(result)
+        return {"result": result}
+    except ZeroDivisionError:
+        errors_calculator_total.inc()
+        return {"error": "Division by zero"}
+    except ValueError as e:
+        errors_calculator_total.inc()
+        return {"error": str(e)}
+5. Создайте роут для метрик /metrics:
+
+from fastapi.responses import PlainTextResponse
+
+@app.get("/metrics")
+async def metrics():
+    return PlainTextResponse(generate_latest())
+
+
+
+
