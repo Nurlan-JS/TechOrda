@@ -1,0 +1,16 @@
+---
+- name: Установка и запуск Nginx
+  hosts: lb
+  become: true
+  tasks:
+    - name: Установка Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Запуск и включение сервиса Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
