@@ -1,0 +1,67 @@
+---
+- name: Настройка nginx для серверов из группы lb
+  hosts: lb
+  become: true
+
+  handlers:
+    - name: reload-nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
+  tasks:
+    - name: Установить Nginx
+      ansible.builtin.package:
+        name: nginx
+        state: present
+
+    - name: Удалить default.conf
+      ansible.builtin.file:
+        path: /etc/nginx/conf.d/default.conf
+        state: absent
+
+    - name: Копировать основной конфигурационный файл nginx
+      ansible.builtin.copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: reload-nginx
+
+    - name: Сгенерировать конфигурации серверных блоков
+      ansible.builtin.template:
+        src: server.conf.j2
+        dest: /etc/nginx/conf.d/{{ item.server_name }}.conf
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - server_port: 7070
+          server_name: jmart-ansible.kz
+          locations:
+            - path: /main
+              status_code: 200
+              message: Добро пожаловать на JMart!
+            - path: /profile
+              status_code: 201
+              message: Это страница профиля.
+        - server_port: 8080
+          server_name: jusan-ansible.kz
+          locations:
+            - path: /
+              status_code: 200
+              message: Добро пожаловать на Jusan Bank!
+            - path: /account
+              status_code: 202
+              message: Здесь ваш банковский счет!
+        - server_port: 9090
+          server_name: invest-ansible.kz
+          locations:
+            - path: /home
+              status_code: 200
+              message: Добро пожаловать на Jusan Invest!
+            - path: /user
+              status_code: 203
+              message: Это страница с вашим брокерским счетом.
+      notify: reload-nginx
